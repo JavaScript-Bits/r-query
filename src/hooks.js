@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios"
 
+
 let electionsData = [
    {
             "_id": "63729678dcd9ef63e0648e0f",
@@ -23,7 +24,7 @@ let electionsData = [
 ]
 
 const getElections = async ()=>{
-  const response = await axios.get("http://localhost:3000/elections")
+  const response = await axios.get("http://localhost:4000/elections")
   return response;
 }
 
@@ -35,7 +36,7 @@ export const useGetElections = ()=>{
 }
 
 const createElection = async (data)=>{
-  const response = await axios.post("http://localhost:3000/elections", data)
+  const response = await axios.post("http://localhost:4000/elections", data)
   return response
 }
 
@@ -52,7 +53,7 @@ export const useCreateElection = ()=>{
   })
 }
 const deleteElection = async (id)=>{
-  const response = await axios.delete(`http://localhost:3000/elections/${id}`)
+  const response = await axios.delete(`http://localhost:4000/elections/${id}`)
   return response
 }
 
@@ -68,3 +69,16 @@ export const useDeleteElection = ()=>{
   })
 }
 
+const getPosts = async (query)=>{
+  console.log('query', query?.queryKey[1])
+  const page = query?.queryKey[1]
+  const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?_page=${page}&_limit=10`)
+  return response;
+}
+
+export const usePosts = (page) =>{
+  return useQuery({
+  queryKey:["posts", page],
+  queryFn:getPosts
+  })
+}
